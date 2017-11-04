@@ -1,3 +1,6 @@
+const directions = [[0, -1], [0, 1], [-1, 0], [1, 0], [-1, -1], [-1, 1], [1, -1], [1, 1]];
+
+
 const rev = {
 //repeat: returns an array contain n elements, with each element being value
 	repeat: function(value, n){
@@ -119,6 +122,64 @@ const rev = {
 	},
 	
 //getCellsToFlip: find all groups of cells to flip	
+	getCellsToFlip: function(board, lastRow, lastCol){
+		let res = [];
+		const h = Math.sqrt(board.length);
+		const currsign = board[rev.rowColToIndex(board, lastRow, lastCol)];
+		let curr = [];
+		for(let cDir = 0; cDir < directions.length; cDir++){
+			curr = [];
+			let cRow = lastRow + directions[cDir][0];
+			let cCol = lastCol + directions[cDir][1];
+			while(cRow >= 0 && cRow < h && cCol >= 0 && cCol < h && board[rev.rowColToIndex(board, cRow, cCol)] !== currsign && board[rev.rowColToIndex(board, cRow, cCol)] !== " "){
+				curr.push([cRow, cCol]);
+				cRow += directions[cDir][0];
+				cCol += directions[cDir][1];
+			}
+			if(cRow >= 0 && cRow < h && cCol >= 0 && cCol < h && board[rev.rowColToIndex(board, cRow, cCol)] === currsign && curr.length != 0)
+				res.push(curr);
+		}
+		return res;
+	},
+	
+//isValidMove: checks if move is valid
+	isValidMove: function(board, letter, row, col){
+		if(board[rev.rowColToIndex(board, row, col)] !== " ") return false;
+		let testBoard = rev.setBoardCell(board, letter, row, col);
+		return rev.getCellsToFlip(testBoard, row, col).length != 0
+	},
+	
+//isValidMoveAlgebraicNotation: check if move is valid
+	isValidMoveAlgebraicNotation: function(board, letter, algebraicNotation){
+		let rowcol = rev.algebraicToRowCol(algebraicNotation);
+		return rev.isValidMove(board, letter, rowcol.row, rowcol.col);
+	},
+	
+//getLetterCounts: return count of letters
+	getLetterCounts: function(board){
+		let res = {};
+		res.xs = 0;
+		res.os = 0;
+		for(let i = 0; i < board.length; i++){
+			if(board[i] === "X")
+				res.xs++;
+			else if(board[i] === "O")
+				res.os++;
+		}
+		return res;
+	},
+	
+//getValidMoves: return array of valid moves
+	getValidMoves: function(board, letter){
+		let res = [];
+		for(let i = 0; i < board.length; i++){
+			let rowcol = rev.indexToRowCol(board, i);
+			if(rev.isValidMove(board, letter, rowcol.row, rowcol.col)){
+				res.push([rowcol.row, rowcol.col]);
+			}
+		}
+		return res;
+	},
 };
 
 module.exports = rev;
