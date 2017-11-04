@@ -108,7 +108,7 @@ const rev = {
 		else if(board[index] === "X")
 			return rev.setBoardCell(board, "O", row, col);
 		else if(board[index] === "O")
-			return rev.setBoardCell(board, "X", row, cell);
+			return rev.setBoardCell(board, "X", row, col);
 	},
 	
 //flipCells: flip the group of cells
@@ -146,7 +146,7 @@ const rev = {
 	isValidMove: function(board, letter, row, col){
 		if(board[rev.rowColToIndex(board, row, col)] !== " ") return false;
 		let testBoard = rev.setBoardCell(board, letter, row, col);
-		return rev.getCellsToFlip(testBoard, row, col).length != 0
+		return rev.getCellsToFlip(testBoard, row, col).length != 0;
 	},
 	
 //isValidMoveAlgebraicNotation: check if move is valid
