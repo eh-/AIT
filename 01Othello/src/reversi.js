@@ -42,7 +42,7 @@ const rev = {
 //algebraicToRowCol: return row, col of algebraicNotation
 	algebraicToRowCol: function(algebraicNotation){
 		if(algebraicNotation.length < 2 || algebraicNotation.length > 3 ||
-			algebraicNotation.includes(" ") || algebraicNotation.includes("\^[a-z0-9]+$/i"))
+			algebraicNotation.includes(" ") || algebraicNotation.includes("\[a-z0-9]+$/i"))
 			return undefined;
 		let res = {};
 		let letter = algebraicNotation.charCodeAt(0) - 65;
@@ -79,13 +79,13 @@ const rev = {
 		let border = "   ";
 		for(let i = 0; i < h; i++){
 			header += ("  " + String.fromCodePoint(65 + i) + " ");
-			border += "+---"
+			border += "+---";
 		}
 		header += " \n";
 		border += "+\n";
 		res += (header + border);
 		for(let i = 0; i < h; i++){
-			let curr = " " + (i + 1).toString() + " ";
+			let curr = (i + 1 > 9 ? "" : " ") + (i + 1).toString() + " ";
 			for(let j = 0; j < h; j++){
 				let index = rev.rowColToIndex(board, i, j);
 				curr += ("| " + board[index] + " ");
@@ -175,7 +175,7 @@ const rev = {
 		for(let i = 0; i < board.length; i++){
 			let rowcol = rev.indexToRowCol(board, i);
 			if(rev.isValidMove(board, letter, rowcol.row, rowcol.col)){
-				res.push([rowcol.row, rowcol.col]);
+				res.push(rowcol);
 			}
 		}
 		return res;
