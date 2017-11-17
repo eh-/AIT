@@ -7,9 +7,9 @@ const processGameData = function(gameObj){
 	const gameidString = 'Game ID: ' + gameObj.g.gid + ', ' + gameObj.g.gdte + '\n=====';
 	
 	//Report the final score of the game
-	const vScore = parseInt(gameObj.g.vls.q1) + parseInt(gameObj.g.vls.q2) + parseInt(gameObj.g.vls.q3) + parseInt(gameObj.g.vls.q4);
-	const hScore = parseInt(gameObj.g.hls.q1) + parseInt(gameObj.g.hls.q2) + parseInt(gameObj.g.hls.q3) + parseInt(gameObj.g.hls.q4);
-	const gameScoreString = gameObj.g.vls.tc + ' ' + gameObj.g.vls.tn + ' - ' + vScore.toString() + '\n' + gameObj.g.hls.tc + ' ' + gameObj.g.hls.tn + ' - ' + hScore.toString();
+	const vScore = (3 * parseInt(gameObj.g.vls.tstsg.tpm)) + (2 * (parseInt(gameObj.g.vls.tstsg.fgm) - parseInt(gameObj.g.vls.tstsg.tpm))) + parseInt(gameObj.g.vls.tstsg.ftm);
+	const hScore = (3 * parseInt(gameObj.g.hls.tstsg.tpm)) + (2 * (parseInt(gameObj.g.hls.tstsg.fgm) - parseInt(gameObj.g.hls.tstsg.tpm))) + parseInt(gameObj.g.hls.tstsg.ftm);
+	const gameScoreString = gameObj.g.hls.tc + ' ' + gameObj.g.hls.tn + ' - ' + hScore.toString() + '\n' + gameObj.g.vls.tc + ' ' + gameObj.g.vls.tn + ' - ' + vScore.toString();
 	
 	//Player with most rebounds
 	const homePlayers = gameObj.g.hls.pstsg;

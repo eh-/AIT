@@ -21,6 +21,6 @@
     "sinon": "^1.17.7"
   },
   "dependencies": {
-    "request": "^2.79.0"
+    "request": "^2.83.0"
   }
 }
