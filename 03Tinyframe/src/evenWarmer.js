@@ -118,8 +118,7 @@ Response.prototype.sendFile = function(fileName){
 	}
 	else if(fileType === 'text'){
 		fs.readFile(filePath, 'utf8', callback.bind(this, fileExts[fileExt]));
-	}
-	
+	}	
 };
 
 

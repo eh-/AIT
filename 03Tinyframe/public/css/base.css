@@ -1,0 +1,22 @@
+h1{
+	color: saddlebrown;
+	text-align: center;
+}
+h2{
+	text-align:center;
+	color: goldenrod;
+}
+ul{
+	text-align:center;
+}
+body{
+	background-color: linen;
+}
+img{
+	display:block;
+	margin: 0 auto;
+}
+p{
+	color: darkgoldenrod;
+	margin: 50px;
+}
