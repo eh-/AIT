@@ -1,0 +1,21 @@
+{
+  "name": "04express",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dicey.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "private": true,
+  "devDependencies": {},
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "hbs": "^4.0.1"
+  }
+}

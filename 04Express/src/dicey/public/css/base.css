@@ -1,0 +1,32 @@
+h1{
+	text-align: center;
+	
+}
+ul{
+	text-align:center;
+	list-style-type:none;
+	margin: 0;
+	padding: 0;
+}
+li{
+	margin-right: 20px;
+	display: inline;
+}
+li:after{
+content:'|';
+margin-left:20px;
+}
+li:last-child:after{
+	content:'';
+	margin-left:0;
+}
+a{
+	text-decoration:none;
+	color:blue;
+}
+a:hover{
+	color:purple;
+}
+p{
+	text-align: center;
+}
