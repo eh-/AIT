@@ -1,0 +1,7 @@
+<h2>Recommended  Meals</h2>
+<dl style='text-align:center;'>
+{{#each meals as |meal|}}
+	<dt> {{meal.name}} ({{meal.category}})</dt>
+	<dd> {{meal.description}}</dd>
+{{/each}}
+</dl>

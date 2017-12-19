@@ -1,0 +1,32 @@
+<html>
+	<head>
+		<link rel='stylesheet' href='./css/base.css'>
+		<title>Home Page</title>
+	</head>
+	
+	<body>
+		<h1>FOODZ 4 U 2 EAT</h1>
+		<form method='get'>
+			<input type='radio' name='filterCategory' value='breakfast'>Breakfast
+			<input type='radio' name='filterCategory' value='lunch'>Lunch
+			<input type='radio' name='filterCategory' value='dinner'>Dinner
+			<input type='radio' name='filterCategory' value='anytime'>Anytime
+			<input type='submit' value='Filter Meals'>
+		</form>
+		<hr>
+		{{{body}}}
+		<hr>
+		<form method='post'>
+			<h3>Add a Meal Reccomendation:</h3>
+			Name: <input type='text' name='name' required><br>
+			Description: <input type='text' name='description' required><br>
+			<input type='radio' name='filterCategory' value='breakfast' required>Breakfast
+			<input type='radio' name='filterCategory' value='lunch'>Lunch
+			<br>
+			<input type='radio' name='filterCategory' value='dinner'>Dinner
+			<input type='radio' name='filterCategory' value='anytime'>Anytime
+			<br>
+			<input type='submit' value='Add Meal'>
+		</form>
+	</body>	
+</html>
