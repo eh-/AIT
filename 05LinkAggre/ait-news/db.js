@@ -10,7 +10,7 @@ const Comment = new mongoose.Schema({
 const Link = new mongoose.Schema({
 	url: String,
 	title: String,
-	comments: [Comment],
+	comments: {type: [Comment], default: []},
 });
 Link.plugin(URLSlugs('title'));
 

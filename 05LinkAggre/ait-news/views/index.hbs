@@ -1,0 +1,16 @@
+{{#if subLinks}}
+	<ol>
+	{{#each subLinks as |subLink|}}
+		<li>
+		<a href={{subLink.url}}>{{subLink.title}}</a>,
+		<a href={{subLink.slug}}>[comments]</a>
+		</li>
+	{{/each}}
+	</ol>
+{{/if}}
+
+<form method='post'>
+	URL: <input type='text' name='suburl' required>
+	Title: <input type='text' name='subtitle' required>
+	<input type='submit' value='Submit Link!'>
+</form>
