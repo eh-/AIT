@@ -1,0 +1,25 @@
+{
+  "name": "05linkaggre",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "private": true,
+  "devDependencies": {
+    "eslint": "^4.14.0"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "hbs": "^4.0.1",
+    "mongoose": "^4.13.7",
+    "mongoose-url-slugs": "^1.0.2"
+  }
+}
