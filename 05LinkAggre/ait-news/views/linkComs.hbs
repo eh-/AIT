@@ -1,0 +1,20 @@
+<h2>{{currTitle}}</h2>
+<a href={{currUrl}}>({{currUrl}})</a>
+<br>
+<h4>Comments</h4>
+<ul>
+{{#each currComs as |currCom|}}
+	<li>{{currCom.user}} says
+		<br>
+		{{currCom.text}}
+	</li>
+	<br>
+{{/each}}
+</ul>
+
+<form method='post' action='/subCom'>
+	Comment: <input type='text' name='newCom' required>
+	Name: <input type='text' name='newName' required>
+	<input type='hidden' name='slug' value={{currSlug}}>
+	<input type='submit' value='Add Comment'>
+</form>
