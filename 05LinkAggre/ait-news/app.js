@@ -1,10 +1,17 @@
 const path = require('path'),
 	express = require('express'),
-	bodyParser = require('body-parser');
+	bodyParser = require('body-parser'),
+	session = require('express-session');
 require('./db');
 
+const sessionOptions = {
+	secret: 'secret cookie thang',
+	resave: true,
+	saveUninitialized: true
+};
+
 const app = express();
-//express static setup
+app.use(session(sessionOptions));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(function(req, res, next){
@@ -37,6 +44,7 @@ app.get('/:currSlug', function(req, res){
 				'currUrl': foundLink.url,
 				'currComs': foundLink.comments,
 				'currSlug': foundLink.slug,
+				'lastCom': (req.session.lastComment ? '(the last comment you made was: ' + req.session.lastComment + ')' : ''),
 			});
 		}
 		else{
@@ -60,12 +68,12 @@ app.post('/subLink', function(req, res){
 	});
 });
 app.post('/subCom', function(req, res){
-	console.log(req.body);
 	Link.findOneAndUpdate({'slug': req.body.slug},{$push: {comments: {text: req.body.newCom, user: req.body.newName}}}, function(err, foundLink){
 		if(err){
 			res.render('error', {'title': '480 News!', 'errorMessage': err});
 		}
 		else{
+			req.session.lastComment = req.body.newCom;
 			res.redirect(foundLink.slug);
 		}
 	});
