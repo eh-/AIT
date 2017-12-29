@@ -1,5 +1,10 @@
 <h2>{{currTitle}}</h2>
 <a href={{currUrl}}>({{currUrl}})</a>
+<form method='post' action='/upvote'>
+	{{currVotes}} Likes
+	<input type='hidden' name='slug' value={{currSlug}}>
+	<input type='submit' value='Upvote!'>
+</form>
 <br>
 <h4>Comments</h4>
 <ul>

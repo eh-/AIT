@@ -14,6 +14,8 @@ const app = express();
 app.use(session(sessionOptions));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({extended: false}));
+
+
 app.use(function(req, res, next){
 	console.log(req.method + ' ' + req.originalUrl);
 	next();
@@ -24,6 +26,7 @@ app.set('view engine', 'hbs');
 
 const mongoose = require('mongoose');
 const Link = mongoose.model('Link');
+const Comment = mongoose.model('Comment');
 
 app.get('/', function(req, res){
 	Link.find(function(err, foundLinks, count){
@@ -36,21 +39,23 @@ app.get('/', function(req, res){
 	});
 });
 app.get('/:currSlug', function(req, res){
-	Link.findOne({'slug': req.params.currSlug}, function(err, foundLink){
-		if(foundLink){
-			res.render('linkComs', {
-				'title': foundLink.title, 
-				'currTitle': foundLink.title,
-				'currUrl': foundLink.url,
-				'currComs': foundLink.comments,
-				'currSlug': foundLink.slug,
-				'lastCom': (req.session.lastComment ? '(the last comment you made was: ' + req.session.lastComment + ')' : ''),
-			});
-		}
-		else{
-			res.render('error', {'title': '480 News!', 'errorMessage': err});
-		}
-	});
+	Link.findOne({'slug': req.params.currSlug})
+		.populate('comments')
+		.exec(function(err, foundLink){
+			if(err)
+				res.render('error', {'title': '480 News!', 'errorMessage': err});
+			else{
+				res.render('linkComs', {
+					'title': foundLink.title, 
+					'currTitle': foundLink.title,
+					'currVotes': foundLink.votes,
+					'currUrl': foundLink.url,
+					'currComs': foundLink.comments,
+					'currSlug': foundLink.slug,
+					'lastCom': (req.session.lastComment ? '(the last comment you made was: ' + req.session.lastComment + ')' : ''),
+				});
+			}
+		});
 });
 app.post('/subLink', function(req, res){
 	const addedLink = new Link({
@@ -68,14 +73,25 @@ app.post('/subLink', function(req, res){
 	});
 });
 app.post('/subCom', function(req, res){
-	Link.findOneAndUpdate({'slug': req.body.slug},{$push: {comments: {text: req.body.newCom, user: req.body.newName}}}, function(err, foundLink){
-		if(err){
-			res.render('error', {'title': '480 News!', 'errorMessage': err});
-		}
-		else{
-			req.session.lastComment = req.body.newCom;
-			res.redirect(foundLink.slug);
-		}
+	const addedCom = new Comment({
+		text: req.body.newCom,
+		user: req.body.newName,
+	});
+	addedCom.save(function(err, addedCom){
+		Link.findOneAndUpdate({'slug': req.body.slug},{$push: {comments: addedCom._id}}, function(err, foundLink){
+			if(err){
+				res.render('error', {'title': '480 News!', 'errorMessage': err});
+			}
+			else{
+				req.session.lastComment = req.body.newCom;
+				res.redirect(foundLink.slug);
+			}
+		});
+	});
+});
+app.post('/upvote', function(req, res){
+	Link.findOneAndUpdate({'slug': req.body.slug}, {$inc: {votes: 1}}, function(err, foundLink){
+		res.redirect(foundLink.slug);
 	});
 });
 app.listen(3000);

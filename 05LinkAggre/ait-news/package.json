@@ -21,6 +21,7 @@
     "express-session": "^1.15.6",
     "hbs": "^4.0.1",
     "mongoose": "^4.13.7",
-    "mongoose-url-slugs": "^1.0.2"
+    "mongoose-url-slugs": "^1.0.2",
+    "uuid": "^3.1.0"
   }
 }
