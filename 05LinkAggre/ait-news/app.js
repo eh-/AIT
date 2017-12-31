@@ -10,14 +10,23 @@ const sessionOptions = {
 	saveUninitialized: true
 };
 
+const shMods = require('./shm.js');
+
 const app = express();
-app.use(session(sessionOptions));
+//app.use(session(sessionOptions));
+app.use(shMods.parseCookies);
+app.use(function(req, res, next){
+	console.log(req.hwCookies);
+	next();
+});
+app.use(shMods.manageSession);
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({extended: false}));
 
 
 app.use(function(req, res, next){
 	console.log(req.method + ' ' + req.originalUrl);
+	console.log(req.hwSession);
 	next();
 });
 //hbs setup
@@ -52,7 +61,7 @@ app.get('/:currSlug', function(req, res){
 					'currUrl': foundLink.url,
 					'currComs': foundLink.comments,
 					'currSlug': foundLink.slug,
-					'lastCom': (req.session.lastComment ? '(the last comment you made was: ' + req.session.lastComment + ')' : ''),
+					'lastCom': (req.hwSession.lastComment ? '(the last comment you made was: ' + req.session.lastComment + ')' : ''),
 				});
 			}
 		});
@@ -83,7 +92,7 @@ app.post('/subCom', function(req, res){
 				res.render('error', {'title': '480 News!', 'errorMessage': err});
 			}
 			else{
-				req.session.lastComment = req.body.newCom;
+				req.hwSession.lastComment = req.body.newCom;
 				res.redirect(foundLink.slug);
 			}
 		});

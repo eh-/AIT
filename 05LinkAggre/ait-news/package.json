@@ -22,6 +22,7 @@
     "hbs": "^4.0.1",
     "mongoose": "^4.13.7",
     "mongoose-url-slugs": "^1.0.2",
+    "node-uuid": "^1.4.8",
     "uuid": "^3.1.0"
   }
 }
