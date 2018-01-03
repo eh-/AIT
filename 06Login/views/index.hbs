@@ -1,0 +1,10 @@
+<h1>Home!</h1>
+{{#if user}}
+	<p>Currently logged in as: {{user}}</p>
+{{else}}
+	<p>Not logged in. 
+		<a href='/register'>Register</a> or 
+		<a href='/login'>login</a>
+	</p>
+{{/if}}
+<p>Try checking out the <a href='/restricted'>page that requires authentication</a></p>
