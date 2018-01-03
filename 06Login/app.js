@@ -30,6 +30,23 @@ app.get('/',function(req, res){
 app.get('/register', function(req, res){
 	res.render('register');
 });
+app.get('/login', function(req, res){
+	res.render('login');
+});
+app.get('/restricted', function(req, res){
+	if(req.session.username)
+		res.render('restricted');
+	else
+		res.redirect('/login');
+});
+app.get('/logout', function(req, res){
+	req.session.destroy(function(err){
+		if(err)
+			res.render('error', {'error': err});
+		else
+			res.redirect('/');
+	});
+});
 app.post('/register',function(req, res){
 	if(req.body.pwd.length < 8)
 		res.render('error', {'error': 'Password has to be at least 8 chars long.'});
@@ -49,9 +66,34 @@ app.post('/register',function(req, res){
 		});
 	}
 });
+app.post('/login', function(req, res){
+	User.findOne({'usr': req.body.user}, function(err, user){
+		if(err)
+			res.render('error', {'error': err});
+		else if(user){
+			bcrypt.compare(req.body.pwd, user.pwd, function(err, match){
+				if(err)
+					res.render('error', {'error': err});
+				if(match){
+					req.session.regenerate((err)=>{
+						if(err)
+							res.render('error', {'error': err});
+						else{
+							req.session.username = user.usr;
+							res.redirect('/');
+						}
+					});
+				}
+				else
+					res.render('error', {'error': 'password incorrect'});
+			});
+		}
+		else
+			res.render('error', {'error': 'username not in db'});
+	});
+});
 
 const bcrypt = require('bcrypt');
-
 function register(req, res){
 	const saltRound = 10;
 	bcrypt.hash(req.body.pwd, saltRound, function(err, hash){

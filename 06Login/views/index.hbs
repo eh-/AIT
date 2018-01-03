@@ -1,6 +1,9 @@
 <h1>Home!</h1>
 {{#if user}}
 	<p>Currently logged in as: {{user}}</p>
+	<form action='logout'>
+		<input type='submit' value='Logout'>
+	</form>
 {{else}}
 	<p>Not logged in. 
 		<a href='/register'>Register</a> or 
