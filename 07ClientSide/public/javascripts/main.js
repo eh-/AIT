@@ -13,7 +13,10 @@ function Deck(){
 			this.deck.push(new Card(j + 1, this.names[j], this.suits[i]));
 		}
 	}
-	for(let i = 0; i < 1000; i++){
+	this.shuffle(1000);
+}
+Deck.prototype.shuffle = function(shufs){
+	for(let i = 0; i < shufs; i++){
 		let card1 = Math.floor(Math.random() * this.deck.length);
 		let card2 = Math.floor(Math.random() * this.deck.length);
 		let temp = this.deck[card1];
@@ -54,7 +57,7 @@ function createEle(type, textVal){
 	return newEle;
 }
 
-function winScreen(playerWin){
+function winScreen(deck, curr, comp, user, playerWin){
 	let hitBut = document.querySelector('.hitBut');
 	let standBut = document.querySelector('.standBut');
 	let currDiv = document.querySelector('.game');
@@ -71,7 +74,91 @@ function winScreen(playerWin){
 		statement = createEle('h4', 'Tie');
 	}
 	currDiv.appendChild(statement);
+	let restart = createEle('button', 'Restart');
+	currDiv.appendChild(restart);
+	restart.addEventListener('click', function(evt){
+		deck.shuffle(1000);
+		startGame(deck, curr, comp, user);
+	});
 	
+}
+
+function startGame(deck, curr, comp, user){
+	let currDiv = document.querySelector('.game');
+	while(currDiv.firstChild){
+		currDiv.removeChild(currDiv.firstChild);
+	}
+	curr = 4;
+	comp = [0, 2];
+	user = [1, 3];
+	let compDiv = document.createElement('div');
+	compDiv.classList.add('compDiv');
+	let compHeader = document.createElement('h2');
+	compHeader.classList.add('compHeader');
+	let compHand = document.createElement('ul');
+	compHand.classList.add('compHand');
+	compHeader.appendChild(document.createTextNode('Computer Hand - Total: ?'))
+	compDiv.appendChild(compHeader);
+	compHand.appendChild(createEle('li', deck.deck[0].face));
+	let hidCard = createEle('li', deck.deck[2].face);
+	hidCard.classList.add('invis');
+	compHand.appendChild(hidCard);
+	compDiv.appendChild(compHand);
+	
+	let userDiv = document.createElement('div');
+	userDiv.classList.add('userDiv');
+	let userHeader = document.createElement('h2');
+	userHeader.classList.add('userHeader');
+	let userHand = document.createElement('ul');
+	userHand.classList.add('userHand');
+	userHeader.appendChild(document.createTextNode('Player Hand - Total: ' + deck.findTotal(user).toString()));
+	userDiv.appendChild(userHeader);
+	createEle('li', deck.deck[1].face + ' ');
+	userHand.appendChild(createEle('li', deck.deck[1].face));
+	userHand.appendChild(createEle('li', deck.deck[3].face));
+	userDiv.appendChild(userHand);
+	
+	currDiv.appendChild(compDiv);
+	currDiv.appendChild(userDiv);
+	let hitBut = document.createElement('button');
+	hitBut.classList.add('hitBut');
+	let standBut = document.createElement('button');
+	standBut.classList.add('standBut');
+	hitBut.appendChild(document.createTextNode('Hit'));
+	standBut.appendChild(document.createTextNode('Stand'));
+	currDiv.appendChild(hitBut);
+	currDiv.appendChild(standBut);
+	
+	hitBut.addEventListener('click', function(evt){
+			userHand.appendChild(createEle('li', deck.deck[curr].face));
+			user.push(curr);
+			userHeader.textContent = 'Player Hand - Total: ' + deck.findTotal(user).toString();
+			curr++;
+			if(deck.findTotal(user) > 21)
+				winScreen(deck, curr, comp, user, -1);
+			
+		});
+		standBut.addEventListener('click', function(evt){
+			while(deck.findTotal(comp) < 14){
+				compHand.appendChild(createEle('li', deck.deck[curr].face));
+				comp.push(curr);
+				curr++;
+			}
+			let compTotal = deck.findTotal(comp);
+			compHeader.textContent = 'Computer Hand - Total: ' + compTotal.toString();
+			hidCard.classList.remove('invis');
+			if(compTotal > 21)
+				winScreen(deck, curr, comp, user, 1);
+			else{
+				let userTotal = deck.findTotal(user);
+				if(compTotal > userTotal)
+					winScreen(deck, curr, comp, user, -1);
+				else if(compTotal < userTotal)
+					winScreen(deck, curr, comp, user, 1);
+				else
+					winScreen(deck, curr, comp, user, 0);
+			}
+		});
 }
 
 function main(){
@@ -92,81 +179,11 @@ function main(){
 				deck.deck[i] = temp;
 			}
 		}
-		console.log(deck);
 		let currDiv = document.querySelector('.game');
 		let curr = 4;
 		let comp = [0, 2];
 		let user = [1, 3];
-		let compDiv = document.createElement('div');
-		compDiv.classList.add('compDiv');
-		let compHeader = document.createElement('h2');
-		compHeader.classList.add('compHeader');
-		let compHand = document.createElement('ul');
-		compHand.classList.add('compHand');
-		compHeader.appendChild(document.createTextNode('Computer Hand - Total: ?'))
-		compDiv.appendChild(compHeader);
-		compHand.appendChild(createEle('li', deck.deck[0].face));
-		let hidCard = createEle('li', deck.deck[2].face);
-		hidCard.classList.add('invis');
-		compHand.appendChild(hidCard);
-		compDiv.appendChild(compHand);
-		
-		let userDiv = document.createElement('div');
-		userDiv.classList.add('userDiv');
-		let userHeader = document.createElement('h2');
-		userHeader.classList.add('userHeader');
-		let userHand = document.createElement('ul');
-		userHand.classList.add('userHand');
-		userHeader.appendChild(document.createTextNode('Player Hand - Total: ' + deck.findTotal(user).toString()));
-		userDiv.appendChild(userHeader);
-		createEle('li', deck.deck[1].face + ' ');
-		userHand.appendChild(createEle('li', deck.deck[1].face));
-		userHand.appendChild(createEle('li', deck.deck[3].face));
-		userDiv.appendChild(userHand);
-		
-		currDiv.appendChild(compDiv);
-		currDiv.appendChild(userDiv);
-		let hitBut = document.createElement('button');
-		hitBut.classList.add('hitBut');
-		let standBut = document.createElement('button');
-		standBut.classList.add('standBut');
-		hitBut.appendChild(document.createTextNode('Hit'));
-		standBut.appendChild(document.createTextNode('Stand'));
-		currDiv.appendChild(hitBut);
-		currDiv.appendChild(standBut);
-		hitBut.addEventListener('click', function(evt){
-			
-			userHand.appendChild(createEle('li', deck.deck[curr].face));
-			user.push(curr);
-			userHeader.textContent = 'Player Hand - Total: ' + deck.findTotal(user).toString();
-			curr++;
-			if(deck.findTotal(user) > 21)
-				winScreen(-1);
-			
-		});
-		standBut.addEventListener('click', function(evt){
-			while(deck.findTotal(comp) < 14){
-				compHand.appendChild(createEle('li', deck.deck[curr].face));
-				comp.push(curr);
-				curr++;
-			}
-			let compTotal = deck.findTotal(comp);
-			compHeader.textContent = 'Computer Hand - Total: ' + compTotal.toString();
-			console.log(hidCard);
-			hidCard.classList.remove('invis');
-			if(compTotal > 21)
-				winScreen(1);
-			else{
-				let userTotal = deck.findTotal(user);
-				if(compTotal > userTotal)
-					winScreen(-1);
-				else if(compTotal < userTotal)
-					winScreen(1);
-				else
-					winScreen(0);
-			}
-		});
-		
+		startGame(deck, curr, comp, user);
 	});
 }
 
