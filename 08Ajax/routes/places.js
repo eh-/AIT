@@ -12,7 +12,17 @@ const Place = mongoose.model('Place');
 // since that's taken care of in app.js when
 // this routes file is loaded as middleware
 router.get('/places', (req, res) => {
-
+	const query = {};
+	if(req.query.location)
+		query.location = req.query.location;
+	if(req.query.cuisine != "")
+		query.cuisine = req.query.cuisine;
+	Place.find(query, function(err, places){
+		if(err)
+			console.log(err);
+		else
+			res.json(places);
+	});
 });
 
 router.post('/places/create', (req, res) => {
