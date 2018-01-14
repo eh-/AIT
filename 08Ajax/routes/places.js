@@ -15,18 +15,34 @@ router.get('/places', (req, res) => {
 	const query = {};
 	if(req.query.location)
 		query.location = req.query.location;
-	if(req.query.cuisine != "")
+	if(req.query.cuisine)
 		query.cuisine = req.query.cuisine;
 	Place.find(query, function(err, places){
-		if(err)
-			console.log(err);
+		if(err){
+			res.json({error: err.message});
+		}
+			
 		else
 			res.json(places);
 	});
 });
 
 router.post('/places/create', (req, res) => {
-
+	const newRest = new Place({
+		name: req.body.name,
+		cuisine: req.body.cuisine,
+		location: req.body.location,
+	});
+	newRest.save(function(err, newRest){
+		if(err){
+			res.json({
+				error: err.message,
+			});
+		}
+		else{
+			res.json(newRest);
+		}
+	});
 });
 
 module.exports = router;
