@@ -1,25 +1,28 @@
 .playArea{
 	position: relative;
 	height: 300px;
+	width: 150px;
+	border-right: 2px dashed black;
 }
 
-.finline{
+.racer{
 	position: absolute;
-	height: 100%;
-	border-left: 1px solid gray;
-	margin-left: 0.5px;
-	width: 0px;
-	left: 300px;
+	left: 0px;
+	font-size:50px;
 }
 
 .player1{
-	position: absolute;
-	left: 0px;
 	top: 10px;
 }
 
 .player2{
-	position: absolute;
-	left: 0px;
 	bottom: 10px;
+}
+
+button {
+  font-size: 2em;
+}
+
+.hidden{
+	display: none;
 }
