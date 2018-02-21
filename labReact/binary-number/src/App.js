@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 
-var numBits = 8;
+var numBits = 10;
 
 class Bit extends Component{
 	render(){
